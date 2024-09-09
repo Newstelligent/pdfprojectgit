@@ -5,8 +5,6 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.urlencoded({ extended: true }));
-
 // Serve the updated form
 app.get('/', (req, res) => {
   res.send(`
@@ -39,8 +37,11 @@ app.get('/generate-pdf', async (req, res) => {
   const { name, firstName, birthDate, birthPlace, nationality, docNumber } = req.query;
 
   try {
-    // Load the PDF form
-    const pdfPath = path.resolve(__dirname, '../90-antrag-schengenvisum-data.pdf');
+    // Determine if running locally or in production
+    const pdfPath = process.env.NODE_ENV === 'production' 
+      ? path.resolve(__dirname, '../90-antrag-schengenvisum-data.pdf') 
+      : path.resolve(__dirname, '90-antrag-schengenvisum-data.pdf');
+    
     const pdfBytes = fs.readFileSync(pdfPath);
 
     // Load a PDFDocument from the existing PDF bytes
