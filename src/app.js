@@ -34,7 +34,8 @@ app.get('/', (req, res) => {
   `);
 });
 
-.get('/generate-pdf', async (req, res) => {
+// Generate PDF with form data
+app.get('/generate-pdf', async (req, res) => {
   const { name, firstName, birthDate, birthPlace, nationality, docNumber } = req.query;
 
   try {
