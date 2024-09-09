@@ -7,7 +7,7 @@
   <input type="text" id="firstName" name="firstName" required>
   <br>
   
-  <label for="birthDate">Birth Date (Geburtsdatum):</label>
+  <label for="birthDate">Date of Birth (Geburtsdatum):</label>
   <input type="date" id="birthDate" name="birthDate" required>
   <br>
 
@@ -19,9 +19,40 @@
   <input type="text" id="nationality" name="nationality" required>
   <br>
 
+  <label for="docType">Document Type (Pass):</label>
+  <input type="text" id="docType" name="docType" required>
+  <br>
+
   <label for="docNumber">Document Number (Reisedokumentnummer):</label>
   <input type="text" id="docNumber" name="docNumber" required>
   <br>
-  
+
+  <label for="expiryDate">Expiration Date (Gültig bis):</label>
+  <input type="date" id="expiryDate" name="expiryDate" required>
+  <br>
+
+  <label for="issuingAuthority">Issuing Authority (Behörde):</label>
+  <input type="text" id="issuingAuthority" name="issuingAuthority" required>
+  <br>
+
+  <label for="issuingCountry">Issuing Country (Ausstellungsland):</label>
+  <input type="text" id="issuingCountry" name="issuingCountry" required>
+  <br>
+
+  <label for="gender">Gender (Geschlecht):</label>
+  <select id="gender" name="gender" required>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+  <br>
+
+  <label for="maritalStatus">Marital Status (Familienstand - Ledig):</label>
+  <select id="maritalStatus" name="maritalStatus" required>
+    <option value="ledig">Ledig</option>
+    <option value="verheiratet">Verheiratet</option>
+    <option value="geschieden">Geschieden</option>
+  </select>
+  <br>
+
   <button type="submit">Generate PDF</button>
 </form>
