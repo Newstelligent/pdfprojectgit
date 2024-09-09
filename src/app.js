@@ -1,35 +1,45 @@
 const express = require('express');
-const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 const fs = require('fs');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware to parse incoming request query data
 app.use(express.urlencoded({ extended: true }));
 
-// Serve the form
+// Serve the updated form
 app.get('/', (req, res) => {
   res.send(`
     <form action="/generate-pdf" method="GET">
-      <label for="name">Name:</label>
+      <label for="name">Name (Familienname):</label>
       <input type="text" id="name" name="name" required>
       <br>
-      <label for="city">City:</label>
-      <input type="text" id="city" name="city" required>
+      <label for="firstName">First Name (Vorname):</label>
+      <input type="text" id="firstName" name="firstName" required>
+      <br>
+      <label for="birthDate">Birth Date (Geburtsdatum):</label>
+      <input type="date" id="birthDate" name="birthDate" required>
+      <br>
+      <label for="birthPlace">Place of Birth (Geburtsort):</label>
+      <input type="text" id="birthPlace" name="birthPlace" required>
+      <br>
+      <label for="nationality">Nationality (Staatsangehörigkeit):</label>
+      <input type="text" id="nationality" name="nationality" required>
+      <br>
+      <label for="docNumber">Document Number (Reisedokumentnummer):</label>
+      <input type="text" id="docNumber" name="docNumber" required>
       <br>
       <button type="submit">Generate PDF</button>
     </form>
   `);
 });
 
-// Generate PDF with form data
-app.get('/generate-pdf', async (req, res) => {
-  const { name, city } = req.query;
+.get('/generate-pdf', async (req, res) => {
+  const { name, firstName, birthDate, birthPlace, nationality, docNumber } = req.query;
 
   try {
     // Load the PDF form
-    const pdfPath = path.resolve(__dirname, '../Test123.pdf');
+    const pdfPath = path.resolve(__dirname, '../90-antrag-schengenvisum-data.pdf');
     const pdfBytes = fs.readFileSync(pdfPath);
 
     // Load a PDFDocument from the existing PDF bytes
@@ -38,13 +48,21 @@ app.get('/generate-pdf', async (req, res) => {
     // Get the form containing all fields in the PDF
     const form = pdfDoc.getForm();
 
-    // Get specific form fields (Name and City) by their names in the PDF
+    // Get specific form fields by their names in the PDF
     const nameField = form.getTextField('name');
-    const cityField = form.getTextField('city');
+    const firstNameField = form.getTextField('firstName');
+    const birthDateField = form.getTextField('birthDate');
+    const birthPlaceField = form.getTextField('birthPlace');
+    const nationalityField = form.getTextField('nationality');
+    const docNumberField = form.getTextField('docNumber');
 
     // Set the values of the form fields
     nameField.setText(name);
-    cityField.setText(city);
+    firstNameField.setText(firstName);
+    birthDateField.setText(birthDate);
+    birthPlaceField.setText(birthPlace);
+    nationalityField.setText(nationality);
+    docNumberField.setText(docNumber);
 
     // Flatten the form to prevent future edits
     form.flatten();
@@ -53,7 +71,7 @@ app.get('/generate-pdf', async (req, res) => {
     const updatedPdfBytes = await pdfDoc.save();
 
     // Set response headers for downloading the PDF
-    res.setHeader('Content-Disposition', 'attachment; filename="filled_form.pdf"');
+    res.setHeader('Content-Disposition', 'attachment; filename="filled_schengen_form.pdf"');
     res.send(Buffer.from(updatedPdfBytes));
   } catch (err) {
     console.error('Error generating PDF:', err);
